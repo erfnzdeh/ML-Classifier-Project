@@ -17,7 +17,11 @@ struct data {
 };
 
 struct data cars[MAX_LINES];
-int numberOfLines = 0;
+
+int numberOfLinesOfData;
+int numberOfLinesOfAddedData;
+int numberOfLinesOfHistory;
+int Counter = 0;
 
 void runMenu() {
     int choice;
@@ -59,40 +63,47 @@ void runMenu() {
     } while (choice != 5);
 }
 
-void readDataDotTxt() {
-//    struct data cars[MAX_LINES];
+void readDataFrom(char *address) {
     char line[MAX_LINE_LENGTH];
     FILE *fp;
     int j;
+    int numberOfLines = 0;
 
-    fp = fopen("data.txt", "r");
+    fp = fopen(address, "r");
     if (fp == NULL) {
         printf("error: failed to open file\n");
         exit(1);
     }
 
-    while (fgets(line, MAX_LINE_LENGTH, fp) != NULL && numberOfLines < MAX_LINES) {
+    while (fgets(line, MAX_LINE_LENGTH, fp) != NULL && Counter < MAX_LINES) {
         j = sscanf(line, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]",
-                   cars[numberOfLines].buying, cars[numberOfLines].maint, cars[numberOfLines].doors,
-                   cars[numberOfLines].persons, cars[numberOfLines].lug_boot, cars[numberOfLines].safety,
-                   cars[numberOfLines].label);
+                   cars[Counter].buying, cars[Counter].maint, cars[Counter].doors,
+                   cars[Counter].persons, cars[Counter].lug_boot, cars[Counter].safety,
+                   cars[Counter].label);
         if (j != 7) {
             printf("error: invalid line format\n");
             exit(1);
         }
+        Counter++;
         numberOfLines++;
     }
+    strcmp(address, "FILES/data.txt") == 0 ? numberOfLinesOfData = numberOfLines : printf("");
+    strcmp(address, "FILES/added_data.txt") == 0 ? numberOfLinesOfAddedData = numberOfLines : printf("");
+    strcmp(address, "FILES/history.txt") == 0 ? numberOfLinesOfHistory = numberOfLines : printf("");
     fclose(fp);
 }
 
 int main() {
-    readDataDotTxt();
-    printf("read %d lines from file:\n", numberOfLines);
-    for (int j = 0; j < numberOfLines; j++) {
-        printf("[LINE%d] [%s] [%s] [%s] [%s] [%s] [%s] [%s]\n", j, cars[j].buying,
+    readDataFrom("FILES/data.txt");
+    readDataFrom("FILES/added_data.txt");
+    printf("numberOfLinesOfData = %d\nnumberOfLinesOfAddedData = %d\n", numberOfLinesOfData, numberOfLinesOfAddedData);
+    for (int j = 0; j < numberOfLinesOfData + numberOfLinesOfAddedData; j++) {
+        printf("[LINE%d] [%s] [%s] [%s] [%s] [%s] [%s] [%s]\n", j + 1, cars[j].buying,
                cars[j].maint, cars[j].doors, cars[j].persons,
                cars[j].lug_boot, cars[j].safety, cars[j].label);
     }
+
+//    runMenu();
     return 0;
 }
 
