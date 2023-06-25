@@ -1,0 +1,23 @@
+# ninja log v5
+1	156	7094099815144598	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+159	341	7094099816943514	Simple_ML_Project.exe	662e8fcb25b01d2f
+5	172	7094116445568922	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+173	379	7094116447541357	Simple_ML_Project.exe	662e8fcb25b01d2f
+3	163	7094117039162971	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+164	348	7094117040952504	Simple_ML_Project.exe	662e8fcb25b01d2f
+3	165	7094118493516090	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+166	361	7094118495381645	Simple_ML_Project.exe	662e8fcb25b01d2f
+4	358	7094121417076935	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+361	704	7094121420466666	Simple_ML_Project.exe	662e8fcb25b01d2f
+5	165	7094121925269240	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+166	356	7094121926982880	Simple_ML_Project.exe	662e8fcb25b01d2f
+3	165	7094125734398073	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+166	354	7094125736208686	Simple_ML_Project.exe	662e8fcb25b01d2f
+4	172	7094125938156684	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+173	357	7094125939886472	Simple_ML_Project.exe	662e8fcb25b01d2f
+3	168	7094126215508898	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+169	345	7094126217200366	Simple_ML_Project.exe	662e8fcb25b01d2f
+3	217	7094140928266129	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+218	434	7094140930346012	Simple_ML_Project.exe	662e8fcb25b01d2f
+5	185	7094141042444885	CMakeFiles/Simple_ML_Project.dir/main.c.obj	70e6e117590439ea
+186	371	7094141044199499	Simple_ML_Project.exe	662e8fcb25b01d2f
