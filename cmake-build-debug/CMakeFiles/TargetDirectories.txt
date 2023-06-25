@@ -1,0 +1,3 @@
+C:/Users/Px/Documents/GitHub/Simple-ML-Project/cmake-build-debug/CMakeFiles/Simple_ML_Project.dir
+C:/Users/Px/Documents/GitHub/Simple-ML-Project/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Px/Documents/GitHub/Simple-ML-Project/cmake-build-debug/CMakeFiles/rebuild_cache.dir
