@@ -36,7 +36,7 @@ struct Label_Data {
     int all;
 };
 
-struct Label_Data Label[4];
+struct Label_Data Label[4];/* = {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};*/
 
 void clearScreen() {
     const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
@@ -118,7 +118,8 @@ void dataAnalysisInitiate() {
         strcmp(label, "good") == 0 ? labelNumber = 2 : printf("");
         strcmp(label, "vgood") == 0 ? labelNumber = 3 : printf("");
 
-        printf("%d %d %d %d %d %d %d\n", buyingNumber, maintNumber, doorsNumber, personsNumber, lug_bootNumber, safetyNumber, labelNumber);
+        printf("%d %d %d %d %d %d %d\n", buyingNumber, maintNumber, doorsNumber, personsNumber, lug_bootNumber,
+               safetyNumber, labelNumber);
 
         Label[labelNumber].all++;
         Label[labelNumber].buying[buyingNumber]++;
@@ -208,7 +209,25 @@ int predictNewTrade() {
     }
     printf("\n");
 
+    input_buying--;
+    input_maint--;
+    input_doors--;
+    input_persons--;
+    input_lug_boot--;
+    input_safety--;
+
     dataAnalysisInitiate();
+
+    float Label0_score = (Label[0].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all)) * (Label[0].buying[input_buying] / Label[0].all) * (Label[0].maint[input_maint] / Label[0].all) * (Label[0].doors[input_doors] / Label[0].all) * (Label[0].lug_boot[input_lug_boot] / Label[0].all) * (Label[0].safety[input_safety] / Label[0].all);
+    float Label1_score = (Label[1].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all)) * (Label[1].buying[input_buying] / Label[1].all) * (Label[1].maint[input_maint] / Label[1].all) * (Label[1].doors[input_doors] / Label[1].all) * (Label[1].lug_boot[input_lug_boot] / Label[1].all) * (Label[1].safety[input_safety] / Label[1].all);
+    float Label2_score = (Label[2].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all)) * (Label[2].buying[input_buying] / Label[2].all) * (Label[2].maint[input_maint] / Label[2].all) * (Label[2].doors[input_doors] / Label[2].all) * (Label[2].lug_boot[input_lug_boot] / Label[2].all) * (Label[2].safety[input_safety] / Label[2].all);
+    float Label3_score = (Label[3].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all)) * (Label[3].buying[input_buying] / Label[3].all) * (Label[3].maint[input_maint] / Label[3].all) * (Label[3].doors[input_doors] / Label[3].all) * (Label[3].lug_boot[input_lug_boot] / Label[3].all) * (Label[3].safety[input_safety] / Label[3].all);
+
+    printf("unacc score = %lf\n", Label0_score);
+    printf("acc score = %lf\n", Label1_score);
+    printf("good score = %lf\n", Label2_score);
+    printf("vgood score = %lf\n", Label3_score);
+    printf("\n");
 
     return 1;
 }
@@ -226,8 +245,16 @@ int main() {
 //               cars[j].maint, cars[j].doors, cars[j].persons,
 //               cars[j].lug_boot, cars[j].safety, cars[j].label);
 //    }
-//    runMenu();
-    dataAnalysisInitiate();
+    runMenu();
+//    dataAnalysisInitiate();
+//    float Label0_score = (Label[0].buying[1] / Label[0].all) * (Label[0].maint[1] / Label[0].all) * (Label[0].doors[1] / Label[0].all) * (Label[0].lug_boot[1] / Label[0].all) * (Label[0].safety[1] / Label[0].all);
+//    float Label1_score = (Label[1].buying[1] / Label[1].all) * (Label[1].maint[1] / Label[1].all) * (Label[1].doors[1] / Label[1].all) * (Label[1].lug_boot[1] / Label[1].all) * (Label[1].safety[1] / Label[1].all);
+//    float Label2_score = (Label[2].buying[1] / Label[2].all) * (Label[2].maint[1] / Label[2].all) * (Label[2].doors[1] / Label[2].all) * (Label[2].lug_boot[1] / Label[2].all) * (Label[2].safety[1] / Label[2].all);
+//    float Label3_score = (Label[3].buying[1] / Label[3].all) * (Label[3].maint[1] / Label[3].all) * (Label[3].doors[1] / Label[3].all) * (Label[3].lug_boot[1] / Label[3].all) * (Label[3].safety[1] / Label[3].all);
+//    printf("unacc score = %lf\n", Label0_score);
+//    printf("acc score = %lf\n", Label1_score);
+//    printf("good score = %lf\n", Label2_score);
+//    printf("vgood score = %lf\n", Label3_score);
     return 0;
 }
 
