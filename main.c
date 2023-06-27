@@ -26,13 +26,113 @@ int numberOfLinesOfAddedData;
 int numberOfLinesOfHistory;
 int Counter = 0;
 
+struct Label_Data {
+    int buying[4];
+    int maint[4];
+    int doors[4];
+    int persons[3];
+    int lug_boot[3];
+    int safety[3];
+    int all;
+};
+
+struct Label_Data Label[4];
+
 void clearScreen() {
     const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
     write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
 }
 
 void dataAnalysisInitiate() {
+    char line[MAX_LINE_LENGTH];
+    char buying[MAX_FIELD_LENGTH];
+    char maint[MAX_FIELD_LENGTH];
+    char doors[MAX_FIELD_LENGTH];
+    char persons[MAX_FIELD_LENGTH];
+    char lug_boot[MAX_FIELD_LENGTH];
+    char safety[MAX_FIELD_LENGTH];
+    char label[MAX_FIELD_LENGTH];
+    int buyingNumber = -1;
+    int maintNumber = -1;
+    int doorsNumber = -1;
+    int personsNumber = -1;
+    int lug_bootNumber = -1;
+    int safetyNumber = -1;
+    int labelNumber = -1;
 
+    FILE *fp;
+    int j;
+
+    fp = fopen("FILES/data.txt", "r");
+    if (fp == NULL) {
+        printf("error: failed to open file\n");
+        exit(1);
+    }
+
+    while (fgets(line, MAX_LINE_LENGTH, fp) != NULL && Counter < MAX_LINES) {
+        j = sscanf(line, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]",
+                   buying, maint, doors, persons, lug_boot, safety, label);
+        if (j != 7) {
+            printf("error: invalid line format\n");
+            exit(1);
+        }
+
+        printf("%s %s %s %s %s %s %s\n", buying, maint, doors, persons, lug_boot, safety, label);
+
+        //buying
+        strcmp(buying, "vhigh") == 0 ? buyingNumber = 0 : printf("");
+        strcmp(buying, "high") == 0 ? buyingNumber = 1 : printf("");
+        strcmp(buying, "med") == 0 ? buyingNumber = 2 : printf("");
+        strcmp(buying, "low") == 0 ? buyingNumber = 3 : printf("");
+
+        //maint
+        strcmp(maint, "vhigh") == 0 ? maintNumber = 0 : printf("");
+        strcmp(maint, "high") == 0 ? maintNumber = 1 : printf("");
+        strcmp(maint, "med") == 0 ? maintNumber = 2 : printf("");
+        strcmp(maint, "low") == 0 ? maintNumber = 3 : printf("");
+
+        //doors
+        strcmp(doors, "2") == 0 ? doorsNumber = 0 : printf("");
+        strcmp(doors, "3") == 0 ? doorsNumber = 1 : printf("");
+        strcmp(doors, "4") == 0 ? doorsNumber = 2 : printf("");
+        strcmp(doors, "5more") == 0 ? doorsNumber = 3 : printf("");
+
+        //persons
+        strcmp(persons, "2") == 0 ? personsNumber = 0 : printf("");
+        strcmp(persons, "4") == 0 ? personsNumber = 1 : printf("");
+        strcmp(persons, "more") == 0 ? personsNumber = 2 : printf("");
+
+        //lug_boot
+        strcmp(lug_boot, "small") == 0 ? lug_bootNumber = 0 : printf("");
+        strcmp(lug_boot, "med") == 0 ? lug_bootNumber = 1 : printf("");
+        strcmp(lug_boot, "big") == 0 ? lug_bootNumber = 2 : printf("");
+
+        //safety
+        strcmp(safety, "low") == 0 ? safetyNumber = 0 : printf("");
+        strcmp(safety, "med") == 0 ? safetyNumber = 1 : printf("");
+        strcmp(safety, "high") == 0 ? safetyNumber = 2 : printf("");
+
+        //label
+        strcmp(label, "unacc") == 0 ? labelNumber = 0 : printf("");
+        strcmp(label, "acc") == 0 ? labelNumber = 1 : printf("");
+        strcmp(label, "good") == 0 ? labelNumber = 2 : printf("");
+        strcmp(label, "vgood") == 0 ? labelNumber = 3 : printf("");
+
+        printf("%d %d %d %d %d %d %d\n", buyingNumber, maintNumber, doorsNumber, personsNumber, lug_bootNumber, safetyNumber, labelNumber);
+
+        Label[labelNumber].all++;
+        Label[labelNumber].buying[buyingNumber]++;
+        Label[labelNumber].doors[doorsNumber]++;
+        Label[labelNumber].lug_boot[lug_bootNumber]++;
+        Label[labelNumber].maint[maintNumber]++;
+        Label[labelNumber].persons[personsNumber]++;
+        Label[labelNumber].safety[safetyNumber]++;
+
+    }
+    fclose(fp);
+
+
+    printf("\n");
 }
 
 int predictNewTrade() {
@@ -106,9 +206,9 @@ int predictNewTrade() {
     if (input_safety != 1 && input_safety != 2 && input_safety != 3) {
         return -1;
     }
+    printf("\n");
+
     dataAnalysisInitiate();
-
-
 
     return 1;
 }
@@ -126,7 +226,8 @@ int main() {
 //               cars[j].maint, cars[j].doors, cars[j].persons,
 //               cars[j].lug_boot, cars[j].safety, cars[j].label);
 //    }
-    runMenu();
+//    runMenu();
+    dataAnalysisInitiate();
     return 0;
 }
 
