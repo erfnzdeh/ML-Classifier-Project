@@ -147,7 +147,76 @@ void dataAnalysisInitiate() {
     printf("\n");
 }
 
+int getInputForPredictNewTrade(int *input_buying, int *input_maint, int *input_doors, int *input_persons,
+                               int *input_lug_boot, int *input_safety) {
+
+    printf("1. What's the car's buying price?\n");
+    printf("[1] vhigh\n");
+    printf("[2] high\n");
+    printf("[3] med\n");
+    printf("[4] low\n");
+    printf("Enter your choice: ");
+    scanf("%d", input_buying);
+    if (*input_buying != 1 && *input_buying != 2 && *input_buying != 3 && *input_buying != 4) {
+        return -1;
+    }
+
+    printf("\n2. What's the car's maintenance price?\n");
+    printf("[1] vhigh\n");
+    printf("[2] high\n");
+    printf("[3] med\n");
+    printf("[4] low\n");
+    printf("Enter your choice: ");
+    scanf("%d", input_maint);
+    if (*input_maint != 1 && *input_maint != 2 && *input_maint != 3 && *input_maint != 4) {
+        return -1;
+    }
+
+    printf("\n3. How many doors does the car have?\n");
+    printf("[1] 2\n");
+    printf("[2] 3\n");
+    printf("[3] 4\n");
+    printf("[4] more!\n");
+    printf("Enter your choice: ");
+    scanf("%d", input_doors);
+    if (*input_doors != 1 && *input_doors != 2 && *input_doors != 3 && *input_doors != 4) {
+        return -1;
+    }
+
+    printf("\n4. How many persons can the car fit in?\n");
+    printf("[1] 2\n");
+    printf("[2] 4\n");
+    printf("[3] more\n");
+    printf("Enter your choice: ");
+    scanf("%d", input_persons);
+    if (*input_persons != 1 && *input_persons != 2 && *input_persons != 3) {
+        return -1;
+    }
+
+    printf("\n5. How big is the car's trunk?\n");
+    printf("[1] small\n");
+    printf("[2] med\n");
+    printf("[3] big\n");
+    printf("Enter your choice: ");
+    scanf("%d", input_lug_boot);
+    if (*input_lug_boot != 1 && *input_lug_boot != 2 && *input_lug_boot != 3) {
+        return -1;
+    }
+
+    printf("\n6. How safe is the car?\n");
+    printf("[1] low\n");
+    printf("[3] med\n");
+    printf("[4] high\n");
+    printf("Enter your choice: ");
+    scanf("%d", input_safety);
+    if (*input_safety != 1 && *input_safety != 2 && *input_safety != 3) {
+        return -1;
+    }
+    printf("\n");
+}
+
 int predictNewTrade() {
+    //TODO: change this after you completed this function.
     int input_buying = 1;
     int input_maint = 1;
     int input_doors = 1;
@@ -155,76 +224,9 @@ int predictNewTrade() {
     int input_lug_boot = 1;
     int input_safety = 1;
 
-//    int input_buying;
-//    int input_maint;
-//    int input_doors;
-//    int input_persons;
-//    int input_lug_boot;
-//    int input_safety;
-//
-//    printf("1. What's the car's buying price?\n");
-//    printf("[1] vhigh\n");
-//    printf("[2] high\n");
-//    printf("[3] med\n");
-//    printf("[4] low\n");
-//    printf("Enter your choice: ");
-//    scanf("%d", &input_buying);
-//    if (input_buying != 1 && input_buying != 2 && input_buying != 3 && input_buying != 4) {
-//        return -1;
-//    }
-//
-//    printf("\n2. What's the car's maintenance price?\n");
-//    printf("[1] vhigh\n");
-//    printf("[2] high\n");
-//    printf("[3] med\n");
-//    printf("[4] low\n");
-//    printf("Enter your choice: ");
-//    scanf("%d", &input_maint);
-//    if (input_maint != 1 && input_maint != 2 && input_maint != 3 && input_maint != 4) {
-//        return -1;
-//    }
-//
-//    printf("\n3. How many doors does the car have?\n");
-//    printf("[1] 2\n");
-//    printf("[2] 3\n");
-//    printf("[3] 4\n");
-//    printf("[4] more!\n");
-//    printf("Enter your choice: ");
-//    scanf("%d", &input_doors);
-//    if (input_doors != 1 && input_doors != 2 && input_doors != 3 && input_doors != 4) {
-//        return -1;
-//    }
-//
-//    printf("\n4. How many persons can the car fit in?\n");
-//    printf("[1] 2\n");
-//    printf("[2] 4\n");
-//    printf("[3] more\n");
-//    printf("Enter your choice: ");
-//    scanf("%d", &input_persons);
-//    if (input_persons != 1 && input_persons != 2 && input_persons != 3) {
-//        return -1;
-//    }
-//
-//    printf("\n5. How big is the car's trunk?\n");
-//    printf("[1] small\n");
-//    printf("[2] med\n");
-//    printf("[3] big\n");
-//    printf("Enter your choice: ");
-//    scanf("%d", &input_lug_boot);
-//    if (input_lug_boot != 1 && input_lug_boot != 2 && input_lug_boot != 3) {
-//        return -1;
-//    }
-//
-//    printf("\n6. How safe is the car?\n");
-//    printf("[1] low\n");
-//    printf("[3] med\n");
-//    printf("[4] high\n");
-//    printf("Enter your choice: ");
-//    scanf("%d", &input_safety);
-//    if (input_safety != 1 && input_safety != 2 && input_safety != 3) {
-//        return -1;
-//    }
-//    printf("\n");
+//    int x = getInputForPredictNewTrade(&input_buying, &input_maint, &input_doors, &input_persons, &input_lug_boot,
+//                               &input_safety);
+//    if (x == -1) return -1;
 
     input_buying--;
     input_maint--;
@@ -235,45 +237,53 @@ int predictNewTrade() {
 
     dataAnalysisInitiate();
 
-    float Label0_score_p1_label_prob = Label[0].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all);
-    float Label0_score_p2_buying_prob = Label[0].buying[input_buying] / Label[0].all;
-    float Label0_score_p3_maint_prob = Label[0].maint[input_maint] / Label[0].all;
-    float Label0_score_p4_doors_prob = Label[0].doors[input_doors] / Label[0].all;
-    float Label0_score_p5_lug_boot_prob = Label[0].lug_boot[input_lug_boot] / Label[0].all;
-    float Label0_score_p6_safety_prob = Label[0].safety[input_safety] / Label[0].all;
+    float Label0_score_p1_label_prob = ((float) Label[0].all /
+                                        ((float) Label[0].all + (float) Label[1].all + (float) Label[2].all +
+                                         (float) Label[3].all));
+    float Label0_score_p2_buying_prob = (float) Label[0].buying[input_buying] / (float) Label[0].all;
+    float Label0_score_p3_maint_prob = (float) Label[0].maint[input_maint] / (float) Label[0].all;
+    float Label0_score_p4_doors_prob = (float) Label[0].doors[input_doors] / (float) Label[0].all;
+    float Label0_score_p5_lug_boot_prob = (float) Label[0].lug_boot[input_lug_boot] / (float) Label[0].all;
+    float Label0_score_p6_safety_prob = (float) Label[0].safety[input_safety] / (float) Label[0].all;
     float Label0_score = Label0_score_p1_label_prob * Label0_score_p2_buying_prob * Label0_score_p3_maint_prob *
                          Label0_score_p4_doors_prob * Label0_score_p5_lug_boot_prob * Label0_score_p6_safety_prob;
 
-    printf("%lf = %lf x %lf x %lf x %lf x %lf x %lf\n", Label0_score, Label0_score_p1_label_prob, Label0_score_p2_buying_prob,
-           Label0_score_p3_maint_prob, Label0_score_p4_doors_prob, Label0_score_p5_lug_boot_prob,
-           Label0_score_p6_safety_prob);
-    printf("Label0_score = (Label[0].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all)) *\n"
-           "                         (Label[0].buying[input_buying] / Label[0].all) * (Label[0].maint[input_maint] / Label[0].all) *\n"
-           "                         (Label[0].doors[input_doors] / Label[0].all) *\n"
-           "                         (Label[0].lug_boot[input_lug_boot] / Label[0].all) *\n"
-           "                         (Label[0].safety[input_safety] / Label[0].all);\n");
-    printf("%lf = (%d / (%d + %d + %d + %d)) * (%d / %d) * (%d / %d) * (%d / %d) * (%d / %d) * (%d / %d)\n",
-           Label0_score, Label[0].all, Label[0].all, Label[1].all, Label[2].all, Label[3].all,
-           Label[0].buying[input_buying], Label[0].all, Label[0].maint[input_maint], Label[0].all,
-           Label[0].doors[input_doors], Label[0].all,
-           Label[0].lug_boot[input_lug_boot], Label[0].all, Label[0].safety[input_safety], Label[0].all);
-    printf("\n");
+//    printf("%lf = %lf x %lf x %lf x %lf x %lf x %lf\n", Label0_score, Label0_score_p1_label_prob,
+//           Label0_score_p2_buying_prob,
+//           Label0_score_p3_maint_prob, Label0_score_p4_doors_prob, Label0_score_p5_lug_boot_prob,
+//           Label0_score_p6_safety_prob);
+//    printf("Label0_score = (Label[0].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all)) *\n"
+//           "                         (Label[0].buying[input_buying] / Label[0].all) * (Label[0].maint[input_maint] / Label[0].all) *\n"
+//           "                         (Label[0].doors[input_doors] / Label[0].all) *\n"
+//           "                         (Label[0].lug_boot[input_lug_boot] / Label[0].all) *\n"
+//           "                         (Label[0].safety[input_safety] / Label[0].all);\n");
+//    printf("%lf = (%d / (%d + %d + %d + %d)) * (%d / %d) * (%d / %d) * (%d / %d) * (%d / %d) * (%d / %d)\n",
+//           Label0_score, Label[0].all, Label[0].all, Label[1].all, Label[2].all, Label[3].all,
+//           Label[0].buying[input_buying], Label[0].all, Label[0].maint[input_maint], Label[0].all,
+//           Label[0].doors[input_doors], Label[0].all,
+//           Label[0].lug_boot[input_lug_boot], Label[0].all, Label[0].safety[input_safety], Label[0].all);
+//    printf("\n");
 
-    float Label1_score = (Label[1].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all)) *
-                         (Label[1].buying[input_buying] / Label[1].all) * (Label[1].maint[input_maint] / Label[1].all) *
-                         (Label[1].doors[input_doors] / Label[1].all) *
-                         (Label[1].lug_boot[input_lug_boot] / Label[1].all) *
-                         (Label[1].safety[input_safety] / Label[1].all);
-    float Label2_score = (Label[2].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all)) *
-                         (Label[2].buying[input_buying] / Label[2].all) * (Label[2].maint[input_maint] / Label[2].all) *
-                         (Label[2].doors[input_doors] / Label[2].all) *
-                         (Label[2].lug_boot[input_lug_boot] / Label[2].all) *
-                         (Label[2].safety[input_safety] / Label[2].all);
-    float Label3_score = (Label[3].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all)) *
-                         (Label[3].buying[input_buying] / Label[3].all) * (Label[3].maint[input_maint] / Label[3].all) *
-                         (Label[3].doors[input_doors] / Label[3].all) *
-                         (Label[3].lug_boot[input_lug_boot] / Label[3].all) *
-                         (Label[3].safety[input_safety] / Label[3].all);
+    float Label1_score = ((float) Label[1].all / ((float) Label[0].all + (float) Label[1].all + (float) Label[2].all + (float) Label[3].all)) *
+                         ((float) Label[1].buying[input_buying] / (float) Label[1].all) *
+                         ((float) Label[1].maint[input_maint] / (float) Label[1].all) *
+                         ((float) Label[1].doors[input_doors] / (float) Label[1].all) *
+                         ((float) Label[1].lug_boot[input_lug_boot] / (float) Label[1].all) *
+                         ((float) Label[1].safety[input_safety] / (float) Label[1].all);
+    float Label2_score = ((float) Label[2].all /
+                          ((float) Label[0].all + (float) Label[1].all + (float) Label[2].all + (float) Label[3].all)) *
+                         ((float) Label[2].buying[input_buying] / (float) Label[2].all) *
+                         ((float) Label[2].maint[input_maint] / (float) Label[2].all) *
+                         ((float) Label[2].doors[input_doors] / (float) Label[2].all) *
+                         ((float) Label[2].lug_boot[input_lug_boot] / (float) Label[2].all) *
+                         ((float) Label[2].safety[input_safety] / (float) Label[2].all);
+    float Label3_score = ((float) Label[3].all /
+                          ((float) Label[0].all + (float) Label[1].all + (float) Label[2].all + (float) Label[3].all)) *
+                         ((float) Label[3].buying[input_buying] / (float) Label[3].all) *
+                         ((float) Label[3].maint[input_maint] / (float) Label[3].all) *
+                         ((float) Label[3].doors[input_doors] / (float) Label[3].all) *
+                         ((float) Label[3].lug_boot[input_lug_boot] / (float) Label[3].all) *
+                         ((float) Label[3].safety[input_safety] / (float) Label[3].all);
 
     printf("unacc score = %lf\n", Label0_score);
     printf("acc score = %lf\n", Label1_score);
