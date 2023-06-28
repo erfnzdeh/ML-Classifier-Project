@@ -47,7 +47,10 @@ struct Label_Data {
     int all;
 };
 
-struct Label_Data Label[4];/* = {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};*/
+struct Label_Data Label[4] = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                              {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                              {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                              {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
 void clearScreen() {
     const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
@@ -130,7 +133,7 @@ void dataAnalysisInitiate() {
         strcmp(label, "vgood") == 0 ? labelNumber = 3 : printf("");
 
 //        printf("%d %d %d %d %d %d %d\n", buyingNumber, maintNumber, doorsNumber, personsNumber, lug_bootNumber,
-//        safetyNumber, labelNumber);
+//               safetyNumber, labelNumber);
 
         Label[labelNumber].all++;
         Label[labelNumber].buying[buyingNumber]++;
@@ -224,9 +227,9 @@ int predictNewTrade() {
     int input_lug_boot = 1;
     int input_safety = 1;
 
-//    int x = getInputForPredictNewTrade(&input_buying, &input_maint, &input_doors, &input_persons, &input_lug_boot,
-//                               &input_safety);
-//    if (x == -1) return -1;
+    int x = getInputForPredictNewTrade(&input_buying, &input_maint, &input_doors, &input_persons, &input_lug_boot,
+                                       &input_safety);
+    if (x == -1) return -1;
 
     input_buying--;
     input_maint--;
@@ -264,7 +267,8 @@ int predictNewTrade() {
 //           Label[0].lug_boot[input_lug_boot], Label[0].all, Label[0].safety[input_safety], Label[0].all);
 //    printf("\n");
 
-    float Label1_score = ((float) Label[1].all / ((float) Label[0].all + (float) Label[1].all + (float) Label[2].all + (float) Label[3].all)) *
+    float Label1_score = ((float) Label[1].all /
+                          ((float) Label[0].all + (float) Label[1].all + (float) Label[2].all + (float) Label[3].all)) *
                          ((float) Label[1].buying[input_buying] / (float) Label[1].all) *
                          ((float) Label[1].maint[input_maint] / (float) Label[1].all) *
                          ((float) Label[1].doors[input_doors] / (float) Label[1].all) *
@@ -307,9 +311,16 @@ int main() {
 //               cars[j].maint, cars[j].doors, cars[j].persons,
 //               cars[j].lug_boot, cars[j].safety, cars[j].label);
 //    }
-//    runMenu();
-    predictNewTrade();
+    runMenu();
+//    predictNewTrade();
 //    dataAnalysisInitiate();
+//    for (int i = 0; i < 3; ++i) {
+//        for (int j = 0; j < 4; ++j) {
+//            printf("Label[%d].all = %d | [j] = %d | %d %d %d %d %d %d\n", i, Label[i].all, j, Label[i].buying[j]++,
+//                   Label[i].doors[j]++, Label[i].lug_boot[j]++, Label[i].maint[j]++, Label[i].persons[j]++,
+//                   Label[i].safety[j]++);
+//        }
+//    }
 //    float Label0_score = (Label[0].buying[1] / Label[0].all) * (Label[0].maint[1] / Label[0].all) * (Label[0].doors[1] / Label[0].all) * (Label[0].lug_boot[1] / Label[0].all) * (Label[0].safety[1] / Label[0].all);
 //    float Label1_score = (Label[1].buying[1] / Label[1].all) * (Label[1].maint[1] / Label[1].all) * (Label[1].doors[1] / Label[1].all) * (Label[1].lug_boot[1] / Label[1].all) * (Label[1].safety[1] / Label[1].all);
 //    float Label2_score = (Label[2].buying[1] / Label[2].all) * (Label[2].maint[1] / Label[2].all) * (Label[2].doors[1] / Label[2].all) * (Label[2].lug_boot[1] / Label[2].all) * (Label[2].safety[1] / Label[2].all);
