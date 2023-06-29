@@ -53,10 +53,16 @@ struct Label_Data Label[4] = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
                               {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
 void runMenu();
+
 void readDataFrom(char *address);
+
 void clearScreen();
+
 void dataAnalysisInitiate();
-int getInputForPredictNewTrade(int *input_buying, int *input_maint, int *input_doors, int *input_persons,int *input_lug_boot, int *input_safety);
+
+int getInputForPredictNewTrade(int *input_buying, int *input_maint, int *input_doors, int *input_persons,
+                               int *input_lug_boot, int *input_safety);
+
 float max(float score, float score1, float score2, float score3);
 
 int predictNewTrade() {
@@ -157,12 +163,45 @@ int predictNewTrade() {
     }
     printf("\n");
 
-    FILE* fp = fopen("FILES/history.txt", "a");
+    FILE *fp = fopen("FILES/history.txt", "a");
     if (fp == NULL) {
         printf("error: failed to open file\n");
         return -1;
     }
-    fprintf(fp, "%d %d %d %d %d %d %d\n", input_buying, input_maint, input_doors, input_persons, input_lug_boot, input_safety, output_label);
+    //
+    input_buying == 0 ? fprintf(fp, "vhigh,") : printf("");
+    input_buying == 1 ? fprintf(fp, "high,") : printf("");
+    input_buying == 2 ? fprintf(fp, "med,") : printf("");
+    input_buying == 3 ? fprintf(fp, "low,") : printf("");
+    //
+    input_maint == 0 ? fprintf(fp, "vhigh,") : printf("");
+    input_maint == 1 ? fprintf(fp, "high,") : printf("");
+    input_maint == 2 ? fprintf(fp, "med,") : printf("");
+    input_maint == 3 ? fprintf(fp, "low,") : printf("");
+    //
+    input_doors == 0 ? fprintf(fp, "2,") : printf("");
+    input_doors == 1 ? fprintf(fp, "3,") : printf("");
+    input_doors == 2 ? fprintf(fp, "4,") : printf("");
+    input_doors == 3 ? fprintf(fp, "5more,") : printf("");
+    //
+    input_persons == 0 ? fprintf(fp, "2,") : printf("");
+    input_persons == 1 ? fprintf(fp, "4,") : printf("");
+    input_persons == 2 ? fprintf(fp, "more,") : printf("");
+    //
+    input_lug_boot == 0 ? fprintf(fp, "small,") : printf("");
+    input_lug_boot == 1 ? fprintf(fp, "med,") : printf("");
+    input_lug_boot == 2 ? fprintf(fp, "big,") : printf("");
+    //
+    input_safety == 0 ? fprintf(fp, "low,") : printf("");
+    input_safety == 1 ? fprintf(fp, "med,") : printf("");
+    input_safety == 2 ? fprintf(fp, "high,") : printf("");
+    //
+    output_label == 0 ? fprintf(fp, "unacc") : printf("");
+    output_label == 1 ? fprintf(fp, "acc") : printf("");
+    output_label == 2 ? fprintf(fp, "good") : printf("");
+    output_label == 3 ? fprintf(fp, "vgood") : printf("");
+
+//    fprintf(fp, "%d %d %d %d %d %d %d\n", input_buying, input_maint, input_doors, input_persons, input_lug_boot, input_safety, output_label);
     fclose(fp);
 
     return 1;
@@ -170,6 +209,13 @@ int predictNewTrade() {
 
 int tradePredictionHistory() {
     readDataFrom("FILES/history.txt");
+    for (int j = 0; j < numberOfLinesOfHistory; j++) {
+        printf("[LINE%d] [buying] %s [maint] %s [doors] %s [persons] %s [lug_boot] %s [safety] %s [label] %s\n", j + 1,
+               cars[j].buying,
+               cars[j].maint, cars[j].doors, cars[j].persons,
+               cars[j].lug_boot, cars[j].safety, cars[j].label);
+    }
+    Counter = 0;
     return 1;
 }
 
@@ -177,11 +223,6 @@ int main() {
 //    readDataFrom("FILES/data.txt");
 //    readDataFrom("FILES/added_data.txt");
 //    printf("numberOfLinesOfData = %d\nnumberOfLinesOfAddedData = %d\n", numberOfLinesOfData, numberOfLinesOfAddedData);
-//    for (int j = 0; j < numberOfLinesOfData + numberOfLinesOfAddedData; j++) {
-//        printf("[LINE%d] [%s] [%s] [%s] [%s] [%s] [%s] [%s]\n", j + 1, cars[j].buying,
-//               cars[j].maint, cars[j].doors, cars[j].persons,
-//               cars[j].lug_boot, cars[j].safety, cars[j].label);
-//    }
     runMenu();
 //    predictNewTrade();
 //    dataAnalysisInitiate();
@@ -233,6 +274,51 @@ void readDataFrom(char *address) {
     fclose(fp);
 }
 
+int historyOfLabeledHistory[MAX_LINES] = {0};
+
+int labelNewTrades() {
+    int input_acc;
+    readDataFrom("FILES/history.txt");
+    for (int j = 0; j < numberOfLinesOfHistory; j++) {
+        if (historyOfLabeledHistory[j] == 1) continue;
+        printf("");
+        printf("[LINE%d] [buying] %s [maint] %s [doors] %s [persons] %s [lug_boot] %s [safety] %s [label] ???\n", j + 1,
+               cars[j].buying, cars[j].maint, cars[j].doors, cars[j].persons, cars[j].lug_boot, cars[j].safety);
+        printf("What's the car's acceptability?\n");
+        printf("[1] unacc\n");
+        printf("[2] acc\n");
+        printf("[3] good\n");
+        printf("[4] vgood\n");
+        printf("[5] idk. gimme next one.\n");
+        printf("[6] I'm tired of labeling. return to menu.\n");
+        printf("Enter your choice: ");
+        scanf("%d", &input_acc);
+        if (input_acc != 1 && input_acc != 2 && input_acc != 3 && input_acc != 4 && input_acc != 5 && input_acc != 6) {
+            return -1;
+        }
+        if (input_acc == 5) continue;
+        if (input_acc == 6) break;
+
+        historyOfLabeledHistory[j] = 1;
+        input_acc--;
+
+        FILE *fp = fopen("FILES/data.txt", "a");
+        if (fp == NULL) {
+            printf("error: failed to open file\n");
+            return -1;
+        }
+
+        fprintf(fp, "\n%s,%s,%s,%s,%s,%s,", cars[j].buying, cars[j].maint, cars[j].doors, cars[j].persons, cars[j].lug_boot, cars[j].safety);
+        input_acc == 0 ? fprintf(fp, "unacc") : printf("");
+        input_acc == 1 ? fprintf(fp, "acc") : printf("");
+        input_acc == 2 ? fprintf(fp, "good") : printf("");
+        input_acc == 3 ? fprintf(fp, "vgood") : printf("");
+        fclose(fp);
+    }
+    Counter = 0;
+    return 0;
+}
+
 void runMenu() {
     int choice;
     do {
@@ -264,7 +350,10 @@ void runMenu() {
                 break;
             case 3:
                 printf("You have selected option 3: Label new Trades.\n");
-                // add code for this option
+                labelNewTrades() == -1 ? printf("error! invalid input!\n") : printf("");
+                printf("Press Any Key to Continue to Menu...\n");
+                _getch();
+                clearScreen();
                 break;
             case 4:
                 printf("You have selected option 4: Prediction Evaluation.\n");
