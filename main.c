@@ -168,6 +168,7 @@ int predictNewTrade() {
         printf("error: failed to open file\n");
         return -1;
     }
+    fprintf(fp, "\n");
     //
     input_buying == 0 ? fprintf(fp, "vhigh,") : printf("");
     input_buying == 1 ? fprintf(fp, "high,") : printf("");
