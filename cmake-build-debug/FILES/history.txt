@@ -1,3 +1,12 @@
-1 2 1 2 1 2 1
-0 1 0 1 0 1 0
-1 2 1 2 1 2 1
+vhigh,vhigh,2,2,med,low,unacc
+vhigh,vhigh,2,2,med,med,unacc
+vhigh,vhigh,2,2,med,high,unacc
+vhigh,vhigh,2,2,big,low,unacc
+vhigh,vhigh,2,2,big,med,unacc
+vhigh,vhigh,2,2,big,high,unacc
+vhigh,vhigh,2,4,small,low,unacc
+vhigh,vhigh,2,4,small,med,unacc
+vhigh,vhigh,2,4,small,high,unacc
+vhigh,vhigh,2,4,med,low,unacc
+vhigh,vhigh,2,4,med,med,unacc
+vhigh,vhigh,2,2,small,low,unacc
