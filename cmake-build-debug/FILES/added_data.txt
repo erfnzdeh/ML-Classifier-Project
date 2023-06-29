@@ -1,5 +1,0 @@
-xvhigh,vhigh,2,more,small,low,unacc
-xhigh,high,3,2,med,high,acc
-xmed,vhigh,4,4,small,low,good
-xlow,med,5more,more,big,med,unacc
-xvhigh,low,2,4,small,high,vgood
