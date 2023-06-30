@@ -1,3 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <conio.h>
+#include "utils.h"
+
+#define MAX_LINE_LENGTH 100
+#define MAX_FIELD_LENGTH 20
+#define MAX_LINES 1000
+
 //class values
 //unacc, acc, good, vgood
 
@@ -8,17 +18,6 @@
 //persons:  2, 4, more.
 //lug_boot: small, med, big.
 //safety:   low, med, high.
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <conio.h>
-
-
-#define MAX_LINE_LENGTH 100
-#define MAX_FIELD_LENGTH 20
-#define MAX_LINES 1000
 
 struct data {
     char buying[MAX_FIELD_LENGTH];
@@ -32,6 +31,7 @@ struct data {
 
 struct data cars[MAX_LINES];
 
+int historyOfLabeledHistory[MAX_LINES] = {0};
 int numberOfLinesOfData;
 int numberOfLinesOfAddedData;
 int numberOfLinesOfHistory;
@@ -56,8 +56,6 @@ void runMenu();
 
 void readDataFrom(char *address);
 
-void clearScreen();
-
 void dataAnalysisInitiate();
 
 int getInputForPredictNewTrade(int *input_buying, int *input_maint, int *input_doors, int *input_persons,
@@ -65,8 +63,8 @@ int getInputForPredictNewTrade(int *input_buying, int *input_maint, int *input_d
 
 float max(float score, float score1, float score2, float score3);
 
+// 1 !
 int predictNewTrade() {
-    //TODO: change this after you completed this function.
     int input_buying = 1;
     int input_maint = 1;
     int input_doors = 1;
@@ -88,87 +86,63 @@ int predictNewTrade() {
 
     dataAnalysisInitiate();
 
-    float Label0_score_p1_label_prob = ((float) Label[0].all /
-                                        ((float) Label[0].all + (float) Label[1].all + (float) Label[2].all +
-                                         (float) Label[3].all));
-    float Label0_score_p2_buying_prob = (float) Label[0].buying[input_buying] / (float) Label[0].all;
-    float Label0_score_p3_maint_prob = (float) Label[0].maint[input_maint] / (float) Label[0].all;
-    float Label0_score_p4_doors_prob = (float) Label[0].doors[input_doors] / (float) Label[0].all;
-    float Label0_score_p5_lug_boot_prob = (float) Label[0].lug_boot[input_lug_boot] / (float) Label[0].all;
-    float Label0_score_p6_safety_prob = (float) Label[0].safety[input_safety] / (float) Label[0].all;
-    float Label0_score = Label0_score_p1_label_prob * Label0_score_p2_buying_prob * Label0_score_p3_maint_prob *
-                         Label0_score_p4_doors_prob * Label0_score_p5_lug_boot_prob * Label0_score_p6_safety_prob;
+    float ALL = (float) Label[0].all + (float) Label[1].all + (float) Label[2].all + (float) Label[3].all;
 
-//    printf("%lf = %lf x %lf x %lf x %lf x %lf x %lf\n", Label0_score, Label0_score_p1_label_prob,
-//           Label0_score_p2_buying_prob,
-//           Label0_score_p3_maint_prob, Label0_score_p4_doors_prob, Label0_score_p5_lug_boot_prob,
-//           Label0_score_p6_safety_prob);
-//    printf("Label0_score = (Label[0].all / (Label[0].all + Label[1].all + Label[2].all + Label[3].all)) *\n"
-//           "                         (Label[0].buying[input_buying] / Label[0].all) * (Label[0].maint[input_maint] / Label[0].all) *\n"
-//           "                         (Label[0].doors[input_doors] / Label[0].all) *\n"
-//           "                         (Label[0].lug_boot[input_lug_boot] / Label[0].all) *\n"
-//           "                         (Label[0].safety[input_safety] / Label[0].all);\n");
-//    printf("%lf = (%d / (%d + %d + %d + %d)) * (%d / %d) * (%d / %d) * (%d / %d) * (%d / %d) * (%d / %d)\n",
-//           Label0_score, Label[0].all, Label[0].all, Label[1].all, Label[2].all, Label[3].all,
-//           Label[0].buying[input_buying], Label[0].all, Label[0].maint[input_maint], Label[0].all,
-//           Label[0].doors[input_doors], Label[0].all,
-//           Label[0].lug_boot[input_lug_boot], Label[0].all, Label[0].safety[input_safety], Label[0].all);
-//    printf("\n");
+    float unaccScore = (float) Label[0].all / ALL *
+                       (float) Label[0].buying[input_buying] / (float) Label[0].all *
+                       (float) Label[0].maint[input_maint] / (float) Label[0].all *
+                       (float) Label[0].doors[input_doors] / (float) Label[0].all *
+                       (float) Label[0].persons[input_doors] / (float) Label[0].all *
+                       (float) Label[0].lug_boot[input_lug_boot] / (float) Label[0].all *
+                       (float) Label[0].safety[input_safety] / (float) Label[0].all;
 
-    float Label1_score = ((float) Label[1].all /
-                          ((float) Label[0].all + (float) Label[1].all + (float) Label[2].all + (float) Label[3].all)) *
-                         ((float) Label[1].buying[input_buying] / (float) Label[1].all) *
-                         ((float) Label[1].maint[input_maint] / (float) Label[1].all) *
-                         ((float) Label[1].doors[input_doors] / (float) Label[1].all) *
-                         ((float) Label[1].lug_boot[input_lug_boot] / (float) Label[1].all) *
-                         ((float) Label[1].safety[input_safety] / (float) Label[1].all);
-    float Label2_score = ((float) Label[2].all /
-                          ((float) Label[0].all + (float) Label[1].all + (float) Label[2].all + (float) Label[3].all)) *
-                         ((float) Label[2].buying[input_buying] / (float) Label[2].all) *
-                         ((float) Label[2].maint[input_maint] / (float) Label[2].all) *
-                         ((float) Label[2].doors[input_doors] / (float) Label[2].all) *
-                         ((float) Label[2].lug_boot[input_lug_boot] / (float) Label[2].all) *
-                         ((float) Label[2].safety[input_safety] / (float) Label[2].all);
-    float Label3_score = ((float) Label[3].all /
-                          ((float) Label[0].all + (float) Label[1].all + (float) Label[2].all + (float) Label[3].all)) *
-                         ((float) Label[3].buying[input_buying] / (float) Label[3].all) *
-                         ((float) Label[3].maint[input_maint] / (float) Label[3].all) *
-                         ((float) Label[3].doors[input_doors] / (float) Label[3].all) *
-                         ((float) Label[3].lug_boot[input_lug_boot] / (float) Label[3].all) *
-                         ((float) Label[3].safety[input_safety] / (float) Label[3].all);
+    float accScore = (float) Label[1].all / ALL *
+                     (float) Label[1].buying[input_buying] / (float) Label[1].all *
+                     (float) Label[1].maint[input_maint] / (float) Label[1].all *
+                     (float) Label[1].doors[input_doors] / (float) Label[1].all *
+                     (float) Label[1].persons[input_doors] / (float) Label[1].all *
+                     (float) Label[1].lug_boot[input_lug_boot] / (float) Label[1].all *
+                     (float) Label[1].safety[input_safety] / (float) Label[1].all;
 
-    printf("unacc score = %lf\n", Label0_score);
-    printf("acc score = %lf\n", Label1_score);
-    printf("good score = %lf\n", Label2_score);
-    printf("vgood score = %lf\n", Label3_score);
-    printf("==> ");
-    if (Label0_score == max(Label0_score, Label1_score, Label2_score, Label3_score)) {
-        printf("The car's acceptability is more likely to be 'unacc'!\n");
-        output_label = 0;
-    }
-    if (Label1_score == max(Label0_score, Label1_score, Label2_score, Label3_score)) {
-        printf("The car's acceptability is more likely to be 'acc'!\n");
-        output_label = 1;
+    float goodScore = (float) Label[2].all / ALL *
+                      (float) Label[2].buying[input_buying] / (float) Label[2].all *
+                      (float) Label[2].maint[input_maint] / (float) Label[2].all *
+                      (float) Label[2].doors[input_doors] / (float) Label[2].all *
+                      (float) Label[2].persons[input_doors] / (float) Label[2].all *
+                      (float) Label[2].lug_boot[input_lug_boot] / (float) Label[2].all *
+                      (float) Label[2].safety[input_safety] / (float) Label[2].all;
 
-    }
-    if (Label2_score == max(Label0_score, Label1_score, Label2_score, Label3_score)) {
-        printf("The car's acceptability is more likely to be 'good'!\n");
-        output_label = 2;
+    float vgoodScore = (float) Label[3].all / ALL *
+                       (float) Label[3].buying[input_buying] / (float) Label[3].all *
+                       (float) Label[3].maint[input_maint] / (float) Label[3].all *
+                       (float) Label[3].doors[input_doors] / (float) Label[3].all *
+                       (float) Label[3].persons[input_doors] / (float) Label[3].all *
+                       (float) Label[3].lug_boot[input_lug_boot] / (float) Label[3].all *
+                       (float) Label[3].safety[input_safety] / (float) Label[3].all;
 
-    }
-    if (Label3_score == max(Label0_score, Label1_score, Label2_score, Label3_score)) {
-        printf("The car's acceptability is more likely to be 'vgood'!\n");
-        output_label = 3;
+    float sum = unaccScore + accScore + goodScore + vgoodScore;
 
-    }
+    printf("the possibility that this trade belongs to \"unacc\" class is => %.2f%%\n", (unaccScore / sum) * 100);
+    printf("the possibility that this trade belongs to \"acc\" class is => %.2f%%\n", (accScore / sum) * 100);
+    printf("the possibility that this trade belongs to \"good\" class is => %.2f%%\n", (goodScore / sum) * 100);
+    printf("the possibility that this trade belongs to \"vgood\" class is => %.2f%%\n", (vgoodScore / sum) * 100);
     printf("\n");
+
+    if (unaccScore == max(unaccScore, accScore, goodScore, vgoodScore)) {
+        output_label = 0;
+    } else if (accScore == max(unaccScore, accScore, goodScore, vgoodScore)) {
+        output_label = 1;
+    } else if (goodScore == max(unaccScore, accScore, goodScore, vgoodScore)) {
+        output_label = 2;
+    } else {
+        output_label = 3;
+    }
 
     FILE *fp = fopen("FILES/history.txt", "a");
     if (fp == NULL) {
         printf("error: failed to open file\n");
         return -1;
     }
-    fprintf(fp, "\n");
     //
     input_buying == 0 ? fprintf(fp, "vhigh,") : printf("");
     input_buying == 1 ? fprintf(fp, "high,") : printf("");
@@ -201,13 +175,13 @@ int predictNewTrade() {
     output_label == 1 ? fprintf(fp, "acc") : printf("");
     output_label == 2 ? fprintf(fp, "good") : printf("");
     output_label == 3 ? fprintf(fp, "vgood") : printf("");
-
+    fprintf(fp, "\n");
 //    fprintf(fp, "%d %d %d %d %d %d %d\n", input_buying, input_maint, input_doors, input_persons, input_lug_boot, input_safety, output_label);
     fclose(fp);
-
     return 1;
 }
 
+// 2 !
 int tradePredictionHistory() {
     readDataFrom("FILES/history.txt");
     for (int j = 0; j < numberOfLinesOfHistory; j++) {
@@ -220,28 +194,53 @@ int tradePredictionHistory() {
     return 1;
 }
 
+// 3 !
+int labelNewTrades() {
+    int input_acc;
+    readDataFrom("FILES/history.txt");
+    for (int j = 0; j < numberOfLinesOfHistory; j++) {
+        if (historyOfLabeledHistory[j] == 1) continue;
+        printf("");
+        printf("[LINE%d] [buying] %s [maint] %s [doors] %s [persons] %s [lug_boot] %s [safety] %s [label] ???\n", j + 1,
+               cars[j].buying, cars[j].maint, cars[j].doors, cars[j].persons, cars[j].lug_boot, cars[j].safety);
+        printf("What's the car's acceptability?\n");
+        printf("[1] unacc\n");
+        printf("[2] acc\n");
+        printf("[3] good\n");
+        printf("[4] vgood\n");
+        printf("[5] idk. gimme next one.\n");
+        printf("[6] I'm tired of labeling. return to menu.\n");
+        printf("Enter your choice: ");
+        scanf("%d", &input_acc);
+        if (input_acc != 1 && input_acc != 2 && input_acc != 3 && input_acc != 4 && input_acc != 5 && input_acc != 6) {
+            return -1;
+        }
+        if (input_acc == 5) continue;
+        if (input_acc == 6) break;
+
+        historyOfLabeledHistory[j] = 1;
+        input_acc--;
+
+        FILE *fp = fopen("FILES/data.txt", "a");
+        if (fp == NULL) {
+            printf("error: failed to open file\n");
+            return -1;
+        }
+
+        fprintf(fp, "\n%s,%s,%s,%s,%s,%s,", cars[j].buying, cars[j].maint, cars[j].doors, cars[j].persons,
+                cars[j].lug_boot, cars[j].safety);
+        input_acc == 0 ? fprintf(fp, "unacc") : printf("");
+        input_acc == 1 ? fprintf(fp, "acc") : printf("");
+        input_acc == 2 ? fprintf(fp, "good") : printf("");
+        input_acc == 3 ? fprintf(fp, "vgood") : printf("");
+        fclose(fp);
+    }
+    Counter = 0;
+    return 0;
+}
+
 int main() {
-//    readDataFrom("FILES/data.txt");
-//    readDataFrom("FILES/added_data.txt");
-//    printf("numberOfLinesOfData = %d\nnumberOfLinesOfAddedData = %d\n", numberOfLinesOfData, numberOfLinesOfAddedData);
     runMenu();
-//    predictNewTrade();
-//    dataAnalysisInitiate();
-//    for (int i = 0; i < 3; ++i) {
-//        for (int j = 0; j < 4; ++j) {
-//            printf("Label[%d].all = %d | [j] = %d | %d %d %d %d %d %d\n", i, Label[i].all, j, Label[i].buying[j]++,
-//                   Label[i].doors[j]++, Label[i].lug_boot[j]++, Label[i].maint[j]++, Label[i].persons[j]++,
-//                   Label[i].safety[j]++);
-//        }
-//    }
-//    float Label0_score = (Label[0].buying[1] / Label[0].all) * (Label[0].maint[1] / Label[0].all) * (Label[0].doors[1] / Label[0].all) * (Label[0].lug_boot[1] / Label[0].all) * (Label[0].safety[1] / Label[0].all);
-//    float Label1_score = (Label[1].buying[1] / Label[1].all) * (Label[1].maint[1] / Label[1].all) * (Label[1].doors[1] / Label[1].all) * (Label[1].lug_boot[1] / Label[1].all) * (Label[1].safety[1] / Label[1].all);
-//    float Label2_score = (Label[2].buying[1] / Label[2].all) * (Label[2].maint[1] / Label[2].all) * (Label[2].doors[1] / Label[2].all) * (Label[2].lug_boot[1] / Label[2].all) * (Label[2].safety[1] / Label[2].all);
-//    float Label3_score = (Label[3].buying[1] / Label[3].all) * (Label[3].maint[1] / Label[3].all) * (Label[3].doors[1] / Label[3].all) * (Label[3].lug_boot[1] / Label[3].all) * (Label[3].safety[1] / Label[3].all);
-//    printf("unacc score = %lf\n", Label0_score);
-//    printf("acc score = %lf\n", Label1_score);
-//    printf("good score = %lf\n", Label2_score);
-//    printf("vgood score = %lf\n", Label3_score);
     return 0;
 }
 
@@ -275,50 +274,6 @@ void readDataFrom(char *address) {
     fclose(fp);
 }
 
-int historyOfLabeledHistory[MAX_LINES] = {0};
-
-int labelNewTrades() {
-    int input_acc;
-    readDataFrom("FILES/history.txt");
-    for (int j = 0; j < numberOfLinesOfHistory; j++) {
-        if (historyOfLabeledHistory[j] == 1) continue;
-        printf("");
-        printf("[LINE%d] [buying] %s [maint] %s [doors] %s [persons] %s [lug_boot] %s [safety] %s [label] ???\n", j + 1,
-               cars[j].buying, cars[j].maint, cars[j].doors, cars[j].persons, cars[j].lug_boot, cars[j].safety);
-        printf("What's the car's acceptability?\n");
-        printf("[1] unacc\n");
-        printf("[2] acc\n");
-        printf("[3] good\n");
-        printf("[4] vgood\n");
-        printf("[5] idk. gimme next one.\n");
-        printf("[6] I'm tired of labeling. return to menu.\n");
-        printf("Enter your choice: ");
-        scanf("%d", &input_acc);
-        if (input_acc != 1 && input_acc != 2 && input_acc != 3 && input_acc != 4 && input_acc != 5 && input_acc != 6) {
-            return -1;
-        }
-        if (input_acc == 5) continue;
-        if (input_acc == 6) break;
-
-        historyOfLabeledHistory[j] = 1;
-        input_acc--;
-
-        FILE *fp = fopen("FILES/data.txt", "a");
-        if (fp == NULL) {
-            printf("error: failed to open file\n");
-            return -1;
-        }
-
-        fprintf(fp, "\n%s,%s,%s,%s,%s,%s,", cars[j].buying, cars[j].maint, cars[j].doors, cars[j].persons, cars[j].lug_boot, cars[j].safety);
-        input_acc == 0 ? fprintf(fp, "unacc") : printf("");
-        input_acc == 1 ? fprintf(fp, "acc") : printf("");
-        input_acc == 2 ? fprintf(fp, "good") : printf("");
-        input_acc == 3 ? fprintf(fp, "vgood") : printf("");
-        fclose(fp);
-    }
-    Counter = 0;
-    return 0;
-}
 
 void runMenu() {
     int choice;
@@ -368,11 +323,6 @@ void runMenu() {
                 break;
         }
     } while (choice != 5);
-}
-
-void clearScreen() {
-    const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
-    write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
 }
 
 void dataAnalysisInitiate() {
@@ -464,7 +414,6 @@ void dataAnalysisInitiate() {
     }
     fclose(fp);
 
-
     printf("\n");
 }
 
@@ -533,19 +482,5 @@ int getInputForPredictNewTrade(int *input_buying, int *input_maint, int *input_d
     if (*input_safety != 1 && *input_safety != 2 && *input_safety != 3) {
         return -1;
     }
-    printf("\n");
-}
-
-float max(float score, float score1, float score2, float score3) {
-    float maximum = score;
-    if (score1 > maximum) {
-        maximum = score1;
-    }
-    if (score2 > maximum) {
-        maximum = score2;
-    }
-    if (score3 > maximum) {
-        maximum = score3;
-    }
-    return maximum;
+    return 0;
 }
